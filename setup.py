@@ -7,13 +7,13 @@ setup(
     version=(Path(__file__).parent / 'VERSION.txt').read_text(),
     license='MIT',
     description='Very fast static file HTTP server using Nim for speed.',
-    py_modules=['mod'],
-    package_data={'' : ['*.css', '*.nim']},
+    packages=['tinyhttp'],
+    package_data={'' : ['*.css', '*.nim', 'VERSION.txt']},
     include_package_data=True,
     install_requires=['nimporter'],
     entry_points={
 		'console_scripts' : [
-			'tinyhttp=mod:main'
+			'tinyhttp=tinyhttp.mod:main'
 		]
 	}
 )

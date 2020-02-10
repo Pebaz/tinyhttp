@@ -168,7 +168,7 @@ proc serve(settings: NimHttpSettings) =
 proc serve_static_files*(
     host: string, port: int, dir: string, log: bool=false
 ) {.exportpy.} =
-    const version = staticRead("../VERSION.txt")
+    const version = staticRead(currentSourcePath() / "../../VERSION.txt")
     var settings: NimHttpSettings
     settings.name = "tinyhttp"
     settings.version = version
