@@ -1,3 +1,16 @@
+"""
+Usage:
+	pip install tinyhttp
+
+Upload to PyPi:
+	python3 setup.py sdist
+	twine upload dist/<tinyhttp artifact>
+
+Please note: In order to use Nimporter, you must have both Nim installed as well
+as the [Nimpy](https://github.com/yglukhov/Nimpy) library.
+Make sure to star it on GitHub as well while you're up there. ;)
+"""
+
 from pathlib import Path
 from setuptools import setup
 
