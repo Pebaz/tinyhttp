@@ -1,4 +1,4 @@
-import os, signal
+import sys, os, signal
 from multiprocessing import Process
 import nimporter, tinyhttp
 
@@ -18,7 +18,7 @@ class HttpServer:
         )
         
     def start(self):
-        proc.start()
+        self.proc.start()
 
     def stop(self):
         try:
@@ -30,6 +30,24 @@ class HttpServer:
             self.proc.close()
 
 
-def main():
-    import sys
-    pass
+def main(args=None):
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser(description='Fast Static File HTTP Server')
+    parser.add_argument('--host', default='localhost')
+    parser.add_argument('--port', default=8080, type=int)
+    parser.add_argument('--dir', default='.')
+    ver = '%(prog)s ' + (Path(__file__).parent / 'VERSION.txt').read_text()
+    parser.add_argument(
+        '--version',
+        action='version',
+        version=ver
+    )
+
+    args = parser.parse_args(args or sys.argv[1:])
+    server = HttpServer(folder=args.dir, host=args.host, port=args.port)
+    server.start()
+
+if __name__ == '__main__':
+    main()

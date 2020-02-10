@@ -156,18 +156,30 @@ proc serve(settings: NimHttpSettings) =
         else:
             res = sendNotFound(settings, path)
         await req.respond(res.code, res.content, res.headers)
-    echo settings.name, " v", settings.version, " started on port ", int(settings.port), "." 
+    echo settings.name, " v", settings.version, " started on port ", int(settings.port)
     echo "Serving directory ", settings.directory
     asyncCheck server.serve(settings.port, handleHttpRequest, settings.address)
 
 
 proc serve_static_files*(host: string, port: int, dir: string) {.exportpy.} =
+    const version = staticRead("VERSION.txt")
     var settings: NimHttpSettings
+    settings.name = "tinyhttp"
+    settings.version = version
     settings.directory = getCurrentDir() / dir
     settings.logging = false
     settings.mimes = newMimeTypes()
     settings.mimes.register("html", "text/html")
+
+    var text_files = @[
+        "txt", "py", "c", "cpp", "hpp", "css", "nim", "html", "js", "java",
+        "sh", "rs", "cs", "lc", "json", "csv"
+    ]
+    for ext in text_files:
+        settings.mimes.register(ext, "text/plain")
+    
     settings.address = host
     settings.port = Port(port)
     serve(settings)
+
     asyncdispatch.runForever()
