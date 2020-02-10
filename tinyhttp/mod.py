@@ -9,7 +9,7 @@ class HttpServer:
     Runs a fast HTTP server for static files in another process. Seperate
     process is needed because Nimpy doesn't release the GIL.
     """
-    def __init__(self, folder='.', host='localhost', port=9090, log=False):
+    def __init__(self, folder='.', host='localhost', port=8080, log=False, autostop=False):
         self.get_host = lambda self: host
         self.get_port = lambda self: port
         self.get_folder = lambda self: folder
@@ -17,6 +17,10 @@ class HttpServer:
             target=tinyhttp.serve_static_files,
             args=(host, port, folder, log)
         )
+        self.autostop = autostop
+
+    def __del__(self):
+        if self.autostop: self.stop()
         
     def start(self):
         self.proc.start()

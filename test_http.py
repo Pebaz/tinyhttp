@@ -5,7 +5,7 @@ import nimporter, tinyhttp
 # Need to run the http server in another process since Nimpy doesn't release GIL
 proc = Process(
     target=tinyhttp.serve_static_files,
-    args=('0.0.0.0', 9090, '..')
+    args=('0.0.0.0', 8080, '..')
 )
 proc.start()
 import time

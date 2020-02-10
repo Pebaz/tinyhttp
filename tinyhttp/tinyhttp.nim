@@ -101,9 +101,13 @@ proc sendStaticFile(settings: NimHttpSettings, path: string): NimHttpResponse =
     var ext = path.splitFile.ext
     if ext == "":
         ext = ".txt"
+
+    var file = path.readFile
+    if ext == "md":
+        file = "<meta charset=utf-8><link rel=stylesheet href=https://casual-effects.com/markdeep/latest/apidoc.css?>" & file & "<script src=https://casual-effects.com/markdeep/latest/markdeep.min.js? charset=utf-8></script>"
+
     ext = ext[1 .. ^1]
     let mimetype = mimes.getMimetype(ext.toLowerAscii)
-    var file = path.readFile
     return (code: Http200, content: file, headers: {"Content-Type": mimetype}.newHttpHeaders)
 
 proc sendDirContents(settings: NimHttpSettings, path: string): NimHttpResponse = 
