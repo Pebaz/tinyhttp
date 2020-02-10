@@ -103,7 +103,7 @@ proc sendStaticFile(settings: NimHttpSettings, path: string): NimHttpResponse =
         ext = ".txt"
 
     var file = path.readFile
-    if ext == "md":
+    if ext == ".md":
         file = "<meta charset=utf-8><link rel=stylesheet href=https://casual-effects.com/markdeep/latest/apidoc.css?>" & file & "<script src=https://casual-effects.com/markdeep/latest/markdeep.min.js? charset=utf-8></script>"
 
     ext = ext[1 .. ^1]
@@ -176,6 +176,7 @@ proc serve_static_files*(
     settings.logging = log
     settings.mimes = newMimeTypes()
     settings.mimes.register("html", "text/html")
+    settings.mimes.register("md", "text/html")
 
     var text_files = @[
         "txt", "py", "c", "cpp", "hpp", "css", "nim", "html", "js", "java",
