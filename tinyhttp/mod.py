@@ -43,7 +43,7 @@ def main(args=None):
     parser.add_argument('--host', default='localhost')
     parser.add_argument('--port', default=8080, type=int)
     parser.add_argument('--dir', default='.')
-    __ver_str = (Path(__file__).parent.parent / 'VERSION.txt').read_text()
+    __ver_str = (Path(__file__).parent / 'VERSION.txt').read_text()
     ver = '%(prog)s ' + __ver_str
     parser.add_argument(
         '--version',
