@@ -1,6 +1,7 @@
 import sys, os, signal
 from multiprocessing import Process
-import nimporter, tinyhttp
+import nimporter
+from tinyhttp import tinyhttp
 
 
 class HttpServer:
@@ -8,13 +9,13 @@ class HttpServer:
     Runs a fast HTTP server for static files in another process. Seperate
     process is needed because Nimpy doesn't release the GIL.
     """
-    def __init__(self, folder='.', host='localhost', port=9090):
+    def __init__(self, folder='.', host='localhost', port=9090, log=False):
         self.get_host = lambda self: host
         self.get_port = lambda self: port
         self.get_folder = lambda self: folder
         self.proc = Process(
             target=tinyhttp.serve_static_files,
-            args=(host, port, folder)
+            args=(host, port, folder, log)
         )
         
     def start(self):
@@ -38,7 +39,8 @@ def main(args=None):
     parser.add_argument('--host', default='localhost')
     parser.add_argument('--port', default=8080, type=int)
     parser.add_argument('--dir', default='.')
-    ver = '%(prog)s ' + (Path(__file__).parent / 'VERSION.txt').read_text()
+    __ver_str = (Path(__file__).parent.parent / 'VERSION.txt').read_text()
+    ver = '%(prog)s ' + __ver_str
     parser.add_argument(
         '--version',
         action='version',
@@ -46,7 +48,7 @@ def main(args=None):
     )
 
     args = parser.parse_args(args or sys.argv[1:])
-    server = HttpServer(folder=args.dir, host=args.host, port=args.port)
+    server = HttpServer(args.dir, args.host, args.port, True)
     server.start()
 
 if __name__ == '__main__':

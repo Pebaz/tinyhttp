@@ -161,13 +161,15 @@ proc serve(settings: NimHttpSettings) =
     asyncCheck server.serve(settings.port, handleHttpRequest, settings.address)
 
 
-proc serve_static_files*(host: string, port: int, dir: string) {.exportpy.} =
-    const version = staticRead("VERSION.txt")
+proc serve_static_files*(
+    host: string, port: int, dir: string, log: bool=false
+) {.exportpy.} =
+    const version = staticRead("../VERSION.txt")
     var settings: NimHttpSettings
     settings.name = "tinyhttp"
     settings.version = version
     settings.directory = getCurrentDir() / dir
-    settings.logging = false
+    settings.logging = log
     settings.mimes = newMimeTypes()
     settings.mimes.register("html", "text/html")
 

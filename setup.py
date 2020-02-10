@@ -3,10 +3,17 @@ from setuptools import setup
 
 setup(
     name='tinyhttp',
-    version=(Path(__file__).parent / 'VERSION.text').read_text(),
+    author='http://github.com/Pebaz',
+    version=(Path(__file__).parent / 'VERSION.txt').read_text(),
     license='MIT',
     description='Very fast static file HTTP server using Nim for speed.',
-    package_data={'', ['style.css', '*.nim']},
+    py_modules=['mod'],
+    package_data={'' : ['*.css', '*.nim']},
     include_package_data=True,
-    install_requires=['nimporter']
+    install_requires=['nimporter'],
+    entry_points={
+		'console_scripts' : [
+			'tinyhttp=mod:main'
+		]
+	}
 )
